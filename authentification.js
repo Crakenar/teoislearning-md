@@ -33,15 +33,12 @@ app.get('/api', (req,res) => {
 });
 
 app.post('/api/login',  (req, res) => {
-    console.log('login api ');
-    db.query(`select * from user where name = ?`,[req.body.username], (err, result) => {
+    db.query(`select * from user where name = ?`,[req.body.username], async (err, result) => {
         if (err) return res.sendStatus(404)
-        if (result){
-            console.log(result)
-            if (req.body.password === result.password){
+        if (result != null){
+            if (await bcrypt.compare(req.body.password, result[0].password)){
                 res.sendStatus(200)
             }else {
-                console.log('here')
                 res.sendStatus(404)
             }
         }
