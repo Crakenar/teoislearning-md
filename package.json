@@ -1,0 +1,33 @@
+{
+  "name": "teoislearning-md-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "dev": "nodemon authentification.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Crakenar/teoislearning-md-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Crakenar/teoislearning-md-api/issues"
+  },
+  "homepage": "https://github.com/Crakenar/teoislearning-md-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
