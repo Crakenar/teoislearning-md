@@ -3,6 +3,7 @@ export default function mdQuery({database}) {
         findById,
         findByTitle,
         getAllMDFiles,
+        getMdFilesByLang,
         getMdFilesByType
     }
 
@@ -17,7 +18,13 @@ export default function mdQuery({database}) {
     }
 
     async function findById(id){
-      // TODO document why this async function 'findById' is empty
+        const db = await database;
+        return new Promise((resolve, reject) => {
+            db.query(`select * from md_files where id = ?`, [id], (err, results) => {
+                if (err) return reject(results);
+                if (results) return resolve(results)
+            });
+        })
     }
 
     async function getAllMDFiles(){
@@ -30,7 +37,22 @@ export default function mdQuery({database}) {
         })
     }
 
-    async function getMdFilesByType () {
-        /* TODO document why this async function 'getMdFilesByType' is empty */
+    async function getMdFilesByLang(language) {
+        const db = await database;
+        return new Promise((resolve, reject) => {
+            db.query(`select * from md_files where language = ?`,[language], (err, results) => {
+                if (err) return reject(results);
+                if (results) return resolve(results)
+            });
+        })
+    }
+    async function getMdFilesByType (type) {
+        const db = await database;
+        return new Promise((resolve, reject) => {
+            db.query(`select * from md_files where typeMD = ?`,[type], (err, results) => {
+                if (err) return reject(results);
+                if (results) return resolve(results)
+            });
+        })
     }
 }

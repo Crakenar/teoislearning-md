@@ -17,20 +17,29 @@ export default function makeMdAppEndpointHandler({ md }) {
 
 
     async function getMdFiles(httpRequest) {
-        const mdInfo = httpRequest.pathParams || {}
-        console.log('mdInfo', mdInfo)
+        const {id, title, language, typeMD} = httpRequest.queryParams || {}
+        console.log(httpRequest.queryParams)
         let result = null;
-        switch (mdInfo) {
-            case mdInfo.title:
-                result = await md.findByTitle(mdInfo.title)
-                sendHeader(result)
-                break;
-            default :
-                result = await md.getAllMDFiles();
-                console.log(result)
-                return sendHeader(result)
-
+        if (id){
+            result = await md.findById(id)
+            return sendHeader(result)
         }
+        if (title){
+            //title is unique
+            result = await md.findByTitle(title)
+            return sendHeader(result)
+        }
+        if (language){
+            result = await md.getMdFilesByLang(language)
+            return sendHeader(result)
+        }
+        if (typeMD){
+            result = await md.getMdFilesByType(typeMD);
+            return sendHeader(result)
+        }
+        result = await md.getAllMDFiles();
+        return sendHeader(result)
+
     }
     function sendHeader(result) {
         return {
