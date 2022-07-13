@@ -3,23 +3,25 @@ import bcrypt from "bcryptjs";
 export default function authenticationQuery({database}) {
     //ADD methods you will use
     return{
-        findByUsername
+        checkAuth
     }
 
-    async function findByUsername({username, password}){
-        const db = database;
+    async function findByUsername(username){
+        const db = await database;
         try {
-           db.query(`select * from user where name = ?`,[username], async (err, results) => {
+           db.query(`select * from user where name = ?`,[username], (err, results) => {
                if (err) return null;
                console.log(results[0])
-               return await checkPassword(results[0], password)
+               if (results) return results[0]
            });
         } catch (e) {
             console.log(e.message)
         }
     }
 
-    async function checkPassword(result, password) {
+    async function checkAuth({username, password}) {
+        const result = await findByUsername(username);
+        console.log(result)
         if(!result) return 404
         if (await bcrypt.compare(password, result.password)){
             console.log('good to auth')

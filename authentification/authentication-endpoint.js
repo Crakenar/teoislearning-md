@@ -45,7 +45,7 @@ export default function makeAuthenticationEndpointHandler({authentication}) {
 
         try {
             const auth = makeAuthentication(authInfo)
-            const result = await authentication.findByUsername(auth);
+            const result = await authentication.checkAuth(auth);
             console.log('result', result)
             return {
                 headers: {
