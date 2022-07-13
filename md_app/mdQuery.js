@@ -4,9 +4,12 @@ export default function mdQuery({database}) {
         findByTitle,
         getAllMDFiles,
         getMdFilesByLang,
-        getMdFilesByType
+        getMdFilesByType,
+        updateCreateMD
     }
 
+
+    // GET METHODS
     async function findByTitle(title){
         const db = await database;
         return new Promise((resolve, reject) => {
@@ -54,5 +57,41 @@ export default function mdQuery({database}) {
                 if (results) return resolve(results)
             });
         })
+    }
+
+    //POST METHODS
+    async function updateCreateMD(md){
+        const db = await database;
+        const {id, title, descriptionMD, language, typeMD, date_work} = md;
+        if (id){
+           //update
+            const mdInDB = await findById(md.id);
+            if (mdInDB){
+                const sql = `update md_files set title = ?, descriptionMD = ?,
+                                language = ? , typeMD = ?, date_work = ?
+                                where id = ?`
+                const values = [title, descriptionMD, language, typeMD, date_work, id]
+                return new Promise((resolve, reject) => {
+                    db.query(sql,values, (err, results) => {
+                        if (err) return reject(results);
+                        if (results) return resolve(results)
+                    });
+                })
+            }
+        }else {
+            // insert
+            const sql = `insert into md_files (title, descriptionMD, language, typeMD, date_work) values ?`
+            const values = [[title, descriptionMD, language, typeMD, date_work]]
+            return new Promise((resolve, reject) => {
+                db.query(sql,[values], (err, results) => {
+                    console.log(err)
+                    if (err) return reject(results);
+                    if (results){
+                        console.log(results)
+                        return resolve(results)
+                    }
+                });
+            })
+        }
     }
 }
