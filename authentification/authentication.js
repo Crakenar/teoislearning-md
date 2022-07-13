@@ -27,7 +27,6 @@ export default function makeAuthentication (
     }
 
     function validatePassword(label, password){
-        console.log(password)
         if (password.length < 2){
             throw new InvalidPropertyError(
                 `A authentication's ${label} must be at least 2 characters long.`

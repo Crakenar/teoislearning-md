@@ -21,8 +21,6 @@ export default function makeAuthenticationEndpointHandler({authentication}) {
     }
 
 
-
-
     async function postAuthentication (httpRequest) {
         let authInfo = httpRequest.body
         if (!authInfo) {
@@ -46,7 +44,6 @@ export default function makeAuthenticationEndpointHandler({authentication}) {
         try {
             const auth = makeAuthentication(authInfo)
             const result = await authentication.checkAuth(auth);
-            console.log('result', result)
             return {
                 headers: {
                     'Content-Type': 'application/json'

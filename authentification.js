@@ -15,7 +15,6 @@ function authenticationController(req, res) {
     const httpRequest = adaptRequest(req);
     authenticationEndpointHandler(httpRequest)
         .then(({headers, statusCode, data}) => {
-            console.log(data)
             //Here data = status if found in db or not etc atm i do not need data from user
             res
                 .set(headers)
@@ -30,7 +29,6 @@ function authenticationController(req, res) {
 // app.post('/api/login',  (req, res) => {
 //     db.query(`select * from user where name = ?`,[req.body.username], async (err, result) => {
 //         if (err) return res.sendStatus(404)
-//
 //         if (result != null){
 //             if(!result[0]) return res.sendStatus(404)
 //             if (await bcrypt.compare(req.body.password, result[0].password)){
