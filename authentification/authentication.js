@@ -15,6 +15,7 @@ export default function makeAuthentication (
        } = {}) {
         validateUsername('username', username)
         validatePassword('password', password)
+        validateNoWeirdCar('username', username)
         return { username, password }
     }
 
@@ -24,6 +25,15 @@ export default function makeAuthentication (
                 `A authentication's ${label} must be at least 2 characters long.`
             )
         }
+    }
+
+    function validateNoWeirdCar(label, champ){
+         const regex = /^[A-Za-z0-9]*$/;
+         if (!regex.test(champ)){
+             throw new InvalidPropertyError(
+                 `A authentication's ${label} must not have weird characters.`
+             )
+         }
     }
 
     function validatePassword(label, password){

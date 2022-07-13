@@ -1,84 +1,48 @@
-require('dotenv').config()
-const express = require('express');
-const jwt = require('jsonwebtoken');
+import express from "express";
+import cors from "cors"
+
+import authenticationEndpointHandler from "./authentification/index.js";
+import md_AppEndpointHandler from "./md_app/index.js";
+
+import adaptRequest from "./helpers/adapt-request.js";
+
 const app = express();
+app.use(cors());
 app.use(express.json());
 
-let refreshTokens = [];
 
-const posts = [
-    {
-        username: 'john',
-        title: 'post 1'
-    },
-    {
-        username: 'teo',
-        title: 'post teo'
-    }
-]
+app.all('/api/authentication', authenticationController);
+app.all('/api/md', mdController)
 
-app.get('/api', (req, res) => {
-    res.json({
-        message: 'welcome to the api'
-    });
-})
-
-
-app.post('/api/posts',authenticateToken, (req, res) => {
-    // res.json(posts.filter(post => post.username === req.user.name));
-    res.json(posts);
-})
-
-app.post('/api/token', (req, res) => {
-    const refreshTOken = req.body.token;
-    console.log('token', refreshTOken)
-    console.log('refreshTokens', refreshTokens)
-    if (!refreshTOken) return res.sendStatus(401)
-    if (!refreshTokens.includes(refreshTOken)) return res.sendStatus(403)
-    jwt.verify(refreshTOken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403)
-        const accessToken = generateAccessToken({name : user.name});
-        res.json({
-            accessToken: accessToken
-        })
-    });
-});
-
-app.post('/api/login', (req,res) => {
-    //mock user
-    const username = req.body.username;
-    const user = {name : username}
-    const accessToken = generateAccessToken(user);
-    const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
-    refreshTokens.push(refreshToken);
-    res.json({
-        accessToken: accessToken,
-        refreshToken: refreshToken
-    });
-});
-
-app.delete('/logout', (req, res) => {
-    refreshTokens = refreshTokens.filter(token => token !== req.body.token);
-    res.sendStatus(204);
-});
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (token == null){
-        return res.sendStatus(401);
-    }
-
-    jwt.verify(token, process.env.ACCESS_TOKENS_SECRET, (err, user) =>{
-       if (err) {return res.sendStatus(403)}
-
-       req.user = user;
-       req.verified = true;
-       next();
-    });
+function authenticationController(req, res) {
+    const httpRequest = adaptRequest(req);
+    authenticationEndpointHandler(httpRequest)
+        .then(({headers, statusCode, data}) => {
+            //Here data = status if found in db or not etc atm i do not need data from user
+            res
+                .set(headers)
+                .status(statusCode)
+                .sendStatus(data)
+        }).catch((e) => {
+            console.log(e.message)
+            res.status(500).end()
+    })
 }
 
-function generateAccessToken(user){
-    return jwt.sign(user, process.env.ACCESS_TOKENS_SECRET, {expiresIn: '30s' });
+function mdController(req, res) {
+    const httpRequest = adaptRequest(req);
+    md_AppEndpointHandler(httpRequest)
+        .then(({headers, statusCode, data}) => {
+            res
+                .set(headers)
+                .status(statusCode)
+                .send(data)
+        }).catch((e) => {
+        console.log(e.message)
+        res.status(500).end()
+    })
 }
 
-app.listen(5000, () => console.log('serveur started on 5000'))
+app.listen(5001, () => {
+    console.log('listening on 5001')
+})
