@@ -43,6 +43,6 @@ function mdController(req, res) {
     })
 }
 
-app.listen(process.env.PORT | 5001, () => {
+app.listen(process.env.PORT || 5001, () => {
     console.log('listening on 5001')
 })
