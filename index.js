@@ -7,7 +7,11 @@ import md_AppEndpointHandler from "./md_app/index.js";
 import adaptRequest from "./helpers/adapt-request.js";
 
 const app = express();
-app.use(cors());
+const  corsOptions = {
+    origin: ['http://localhost:3000', 'https://teoislearning-md-api.herokuapp.com/'],
+    credentials: true,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 
