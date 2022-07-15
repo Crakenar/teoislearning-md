@@ -27,9 +27,10 @@ export default function makeMD(
     };
 
     function validateTitle(label, title){
-        if (title.length < 4){
+        const regex = /^[A-Za-z0-9]*$/;
+        if (title.length < 4 && regex.test(title)){
             throw new InvalidPropertyError(
-                `A ${label} must be at least 4 characters long.`
+                `A ${label} must be at least 4 characters long and not strange characters.`
             )
         }
     }
