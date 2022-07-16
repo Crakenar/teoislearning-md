@@ -8,7 +8,7 @@ import adaptRequest from "./helpers/adapt-request.js";
 
 const app = express();
 const  corsOptions = {
-    origin: ['http://localhost:3000', 'https://teoislearning-md-api.herokuapp.com/'],
+    origin: ['http://localhost:3000', 'https://teoislearning-md-front.herokuapp.com'],
     credentials: true,
 };
 app.use(cors(corsOptions));
