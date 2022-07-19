@@ -35,7 +35,7 @@ export default function mdQuery({database}) {
     async function getAllMDFiles(){
         const db = await database;
         return new Promise((resolve, reject) => {
-            db.query(`select * from md_files`, (err, results) => {
+            db.query(`select * from md_files order by date_work desc`, (err, results) => {
                 if (err) return reject(results);
                 if (results) return resolve(results)
             });
