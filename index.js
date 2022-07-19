@@ -28,7 +28,6 @@ function authenticationController(req, res) {
                 .status(statusCode)
                 .sendStatus(data)
         }).catch((e) => {
-            console.log(e.message)
             res.status(500).end()
     })
 }
@@ -42,7 +41,6 @@ function mdController(req, res) {
                 .status(statusCode)
                 .send(data)
         }).catch((e) => {
-        console.log(e.message)
         res.status(500).end()
     })
 }
