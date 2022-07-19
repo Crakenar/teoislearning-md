@@ -16,6 +16,7 @@ export default function makeMD(
         language = requiredParam('language'),
         typeMD = requiredParam('typeMD'),
         date_work = requiredParam('date_work'),
+        company = requiredParam('company'),
       ...otherInfo
       } = {}){
         validateTitle('title', title)
@@ -23,7 +24,8 @@ export default function makeMD(
         validateLanguage('language', language)
         validateTypeMD('typeMD', typeMD)
         validateDateWork('date_work', date_work)
-        return {...otherInfo, title, descriptionMD, language, typeMD, date_work}
+        validateCompany('company', company)
+        return {...otherInfo, title, descriptionMD, language, typeMD, date_work, company}
     };
 
     function validateTitle(label, title){
@@ -59,6 +61,15 @@ export default function makeMD(
         if (date_work.length < 4){
             throw new InvalidPropertyError(
                 `A ${label} must be at least 4 characters long.`
+            )
+        }
+    }
+
+    function validateCompany(label, company){
+        const regex = /^[A-Za-z0-9]*$/;
+        if (company.length < 4 && regex.test(company)){
+            throw new InvalidPropertyError(
+                `A ${label} must be at least 4 characters long and not strange characters.`
             )
         }
     }
