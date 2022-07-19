@@ -6,7 +6,7 @@ dotenv.config();
 export default async function initDB(){
     let db;
     function handleDisconnect() {
-         db = mysql.createConnection({
+         db = mysql.createPool({
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
