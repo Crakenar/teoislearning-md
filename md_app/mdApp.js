@@ -17,6 +17,8 @@ export default function makeMD(
         typeMD = requiredParam('typeMD'),
         date_work = requiredParam('date_work'),
         company = requiredParam('company'),
+        duration = requiredParam('duration'),
+        imgPath = requiredParam('imgPath'),
       ...otherInfo
       } = {}){
         validateTitle('title', title)
@@ -25,6 +27,8 @@ export default function makeMD(
         validateTypeMD('typeMD', typeMD)
         validateDateWork('date_work', date_work)
         validateCompany('company', company)
+        validateDuration('duration', duration)
+        validateImgPath('imgPath', imgPath)
         return {...otherInfo, title, descriptionMD, language, typeMD, date_work, company}
     };
 
@@ -69,7 +73,24 @@ export default function makeMD(
         const regex = /^[A-Za-z0-9]*$/;
         if (company.length < 4 && regex.test(company)){
             throw new InvalidPropertyError(
-                `A ${label} must be at least 4 characters long and not strange characters.`
+                `A ${label} must be at least 4 characters long and no strange characters.`
+            )
+        }
+    }
+
+    function validateDuration(label, duration){
+        const regex = /^[A-Za-z0-9]*$/;
+        if (duration.length < 4 && regex.test(duration)){
+            throw new InvalidPropertyError(
+                `A ${label} must be at least 4 characters long and no strange characters.`
+            )
+        }
+    }
+
+    function validateImgPath(label, imgPath){
+        if (imgPath.length > 50){
+            throw new InvalidPropertyError(
+                `A ${label} must be at least 50 characters long.`
             )
         }
     }

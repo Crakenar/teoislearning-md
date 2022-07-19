@@ -64,15 +64,16 @@ export default function mdQuery({database}) {
     //POST METHODS
     async function updateCreateMD(md){
         const db = await database;
-        const {id, title, descriptionMD, language, typeMD, date_work, company} = md;
+        const {id, title, descriptionMD, language, typeMD, date_work, company, duration, imgPath} = md;
         if (id){
            //update
            await findById(md.id).then((res) => {
                 if (res){
                     const sql = `update md_files set title = ?, descriptionMD = ?,
-                                language = ? , typeMD = ?, date_work = ?, company = ? 
+                                language = ? , typeMD = ?, date_work = ?, company = ?,
+                                duration = ?, imgPath = ?
                                 where id = ?`
-                    const values = [title, descriptionMD, language, typeMD, date_work, company, id]
+                    const values = [title, descriptionMD, language, typeMD, date_work, company, duration, imgPath, id]
                     return new Promise((resolve, reject) => {
                         db.query(sql,values, (err, results) => {
                             if (err) return reject(results);
@@ -83,8 +84,8 @@ export default function mdQuery({database}) {
             });
         }else {
             // insert
-            const sql = `insert into md_files (title, descriptionMD, language, typeMD, date_work, company) values ?`
-            const values = [[title, descriptionMD, language, typeMD, date_work, company]]
+            const sql = `insert into md_files (title, descriptionMD, language, typeMD, date_work, company, duration, imgPath) values ?`
+            const values = [[title, descriptionMD, language, typeMD, date_work, company, duration, imgPath]]
             return new Promise((resolve, reject) => {
                 db.query(sql,[values], (err, results) => {
                     if (err) return reject(results);
