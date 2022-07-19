@@ -29,7 +29,7 @@ export default function makeMD(
         validateCompany('company', company)
         validateDuration('duration', duration)
         validateImgPath('imgPath', imgPath)
-        return {...otherInfo, title, descriptionMD, language, typeMD, date_work, company}
+        return {...otherInfo, title, descriptionMD, language, typeMD, date_work, company, duration, imgPath}
     };
 
     function validateTitle(label, title){
@@ -80,7 +80,7 @@ export default function makeMD(
 
     function validateDuration(label, duration){
         const regex = /^[A-Za-z0-9]*$/;
-        if (duration.length < 4 && regex.test(duration)){
+        if (duration.length < 1 && regex.test(duration)){
             throw new InvalidPropertyError(
                 `A ${label} must be at least 4 characters long and no strange characters.`
             )
@@ -88,7 +88,7 @@ export default function makeMD(
     }
 
     function validateImgPath(label, imgPath){
-        if (imgPath.length > 50){
+        if (imgPath.length > 100){
             throw new InvalidPropertyError(
                 `A ${label} must be at least 50 characters long.`
             )
